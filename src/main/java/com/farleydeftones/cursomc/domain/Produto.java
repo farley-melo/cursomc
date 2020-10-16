@@ -1,5 +1,6 @@
 package com.farleydeftones.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Produto implements Serializable {
     private String nome;
     private Double preco;
     @ManyToMany
+    @JsonBackReference
     @JoinTable
             (
                     name = "PRODUTO_CATEGORIA",
