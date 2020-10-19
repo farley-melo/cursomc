@@ -1,13 +1,9 @@
 package com.farleydeftones.cursomc;
 
-import com.farleydeftones.cursomc.domain.Categoria;
-import com.farleydeftones.cursomc.domain.Cidade;
-import com.farleydeftones.cursomc.domain.Estado;
-import com.farleydeftones.cursomc.domain.Produto;
-import com.farleydeftones.cursomc.repositories.CategoriaRepository;
-import com.farleydeftones.cursomc.repositories.CidadeReposistory;
-import com.farleydeftones.cursomc.repositories.EstadoRepository;
-import com.farleydeftones.cursomc.repositories.ProdutoRepository;
+import com.farleydeftones.cursomc.domain.*;
+import com.farleydeftones.cursomc.domain.Endereco;
+import com.farleydeftones.cursomc.domain.enums.TipoCliente;
+import com.farleydeftones.cursomc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +21,10 @@ public class CursomcApplication implements CommandLineRunner {
     CidadeReposistory cidadeReposistory;
     @Autowired
     EstadoRepository estadoRepository;
+    @Autowired
+    ClienteRepository clienteRepository;
+    @Autowired
+    EnderecoRepository enderecoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(CursomcApplication.class, args);
@@ -51,7 +51,19 @@ public class CursomcApplication implements CommandLineRunner {
         Cidade campinas=new Cidade(null,"Campinas",saoPaulo);
         saoPaulo.getCidades().addAll(Arrays.asList(saoCaetano,campinas));
         minasGeraes.getCidades().addAll(Arrays.asList(uberlandia));
+        this.estadoRepository.saveAll(Arrays.asList(saoPaulo,minasGeraes));
+        this.cidadeReposistory.saveAll(Arrays.asList(saoCaetano,uberlandia,campinas));
 
+        Cliente cli01=new Cliente(null,"Maria Silva","maria@gmail.com","123456", TipoCliente.PESSOAFISICA);
+        cli01.getTelefones().addAll(Arrays.asList("270000","28000"));
+
+        Endereco e1=new Endereco(null,"rua Flores","300","apartamento 203","jardim","39000",cli01,uberlandia);
+        Endereco e2=new Endereco(null,"avenida matos","105","sala 800","centro","4000",cli01,saoCaetano);
+
+        cli01.getEnderecos().addAll(Arrays.asList(e1,e2));
+
+        this.clienteRepository.save(cli01);
+        this.enderecoRepository.saveAll(Arrays.asList(e1,e2));
         this.categoriaRepository.saveAll(Arrays.asList(informatica,escritorio));
         this.produtoRepository.saveAll(Arrays.asList(impressora,mouse,computador));
     }
